@@ -31,6 +31,10 @@ def get_matrix_A(p):
     ])
 
 
+def get_vector_b(p):
+    return np.array([4 * p - 175, 133, 110, 112, 17, 32, 13, -18])
+
+
 def main():
     pass
 
