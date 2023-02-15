@@ -17,6 +17,7 @@ p-29  6 -6 -4 -3 -8 -5   5   x^_1   4p-175
 """
 import numpy as np
 from prettytable import PrettyTable
+import matplotlib.pyplot as plt
 from scipy.linalg import solve
 from numpy.linalg import cond, norm
 
@@ -41,14 +42,29 @@ def get_vector_b(p):
 
 
 def print_answer(x_1, x_2):
+    """Выводит на экран два решения и разницу между ними"""
     pt = PrettyTable()
     pt.add_column('x', [f'x_{i + 1}' for i in range(0, len(x_1))])
     pt.add_column('x_1', [x[0] for x in x_1])
     pt.add_column('x_2', [x[0] for x in x_2])
+    pt.add_column('delta', [x[0] for x in x_1 - x_2])
     print(pt)
 
 
+def print_graph(x, y):
+    print(x, y)
+    plt.xlabel('cond')
+    plt.ylabel('norm(x_1-x_2)/norm(x_1)')
+    plt.grid()
+    plt.title("Зависимость cond и величины δ")
+    plt.plot(x, y, '-o')
+    plt.savefig("Graphs.jpg")
+    plt.show()
+
+
 def main():
+    cond_mas = []
+    variable_mas = []
     for p in (10 ** -i for i in range(7)):
         # Получение матрицы A
         matrix_A = get_matrix_A(p)
@@ -60,10 +76,14 @@ def main():
         result = solve(matrix_A, vector_b)
         # Решение уравнения A_t * A * x = A_t * b
         result_transform = solve(matrix_A_transpose.dot(matrix_A), matrix_A_transpose.dot(vector_b))
-
+        # Выводим обусловленность матриц
         print(f'Обусловленность матрицы A: {cond(matrix_A, p="fro")} {cond(matrix_A_transpose, p="fro")}')
+        # Выводим вектора ответа и дельту
         print_answer(result, result_transform)
-
+        # Добавляем значения для анализа
+        cond_mas.append(cond(matrix_A, p='fro'))
+        variable_mas.append(norm(result - result_transform, ord='fro') / norm(result, ord='fro'))
+    print_graph(cond_mas, variable_mas)
 
 
 if __name__ == '__main__':
