@@ -56,16 +56,20 @@ def main():
         print(f'p={p}')
         # Получение матрицы A
         matrix_A = get_matrix_A(p)
-        # Получение транспонированной матрицы A
-        matrix_A_transpose = matrix_A.transpose()
         # Получение вектора b
         vector_b = get_vector_b(p)
+        # Получение транспонированной матрицы A
+        matrix_A_transpose = matrix_A.transpose()
+        # Получение матрицы A_trans * А
+        matrix_A_transpose_A = matrix_A_transpose.dot(matrix_A)
+        # Получение вектора A_trans * b
+        vector_A_ransponse_b = matrix_A_transpose.dot(vector_b)
         # Решение уравнения Ax=b
         result = solve(matrix_A, vector_b)
         # Решение уравнения A_t * A * x = A_t * b
-        result_transform = solve(matrix_A_transpose.dot(matrix_A), matrix_A_transpose.dot(vector_b))
+        result_transform = solve(matrix_A_transpose_A, vector_A_ransponse_b)
         # Выводим обусловленность матриц
-        print(f'Обусловленность матрицы A: {cond(matrix_A, p="fro")} {cond(matrix_A_transpose, p="fro")}')
+        print(f'Обусловленность матрицы A: {cond(matrix_A, p="fro")} {cond(matrix_A_transpose_A, p="fro")}')
         # Выводим вектора ответа и дельту
         print_answer(result, result_transform)
         # Выведем ||x_1-x_2||/||x_1||
