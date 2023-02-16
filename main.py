@@ -51,21 +51,9 @@ def print_answer(x_1, x_2):
     print(pt)
 
 
-def print_graph(x, y):
-    print(x, y)
-    plt.xlabel('cond')
-    plt.ylabel('norm(x_1-x_2)/norm(x_1)')
-    plt.grid()
-    plt.title("Зависимость cond и величины δ")
-    plt.plot(x, y, '-o')
-    plt.savefig("Graphs.jpg")
-    plt.show()
-
-
 def main():
-    cond_mas = []
-    variable_mas = []
     for p in (10 ** -i for i in range(7)):
+        print(f'p={p}')
         # Получение матрицы A
         matrix_A = get_matrix_A(p)
         # Получение транспонированной матрицы A
@@ -80,10 +68,9 @@ def main():
         print(f'Обусловленность матрицы A: {cond(matrix_A, p="fro")} {cond(matrix_A_transpose, p="fro")}')
         # Выводим вектора ответа и дельту
         print_answer(result, result_transform)
-        # Добавляем значения для анализа
-        cond_mas.append(cond(matrix_A, p='fro'))
-        variable_mas.append(norm(result - result_transform, ord='fro') / norm(result, ord='fro'))
-    print_graph(cond_mas, variable_mas)
+        # Выведем ||x_1-x_2||/||x_1||
+        print(f'||x_1-x_2||/||x_1||={norm(result - result_transform, ord="fro") / norm(result, ord="fro")}')
+        print('=' * 80)
 
 
 if __name__ == '__main__':
