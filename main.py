@@ -17,7 +17,6 @@ p-29  6 -6 -4 -3 -8 -5   5   x^_1   4p-175
 """
 import numpy as np
 from prettytable import PrettyTable
-import matplotlib.pyplot as plt
 from scipy.linalg import solve
 from numpy.linalg import cond, norm
 
@@ -52,7 +51,7 @@ def print_answer(x_1, x_2):
 
 
 def main():
-    for p in (10 ** -i for i in range(7)):
+    for p in [1.0, 0.1, 0.01, 0.0001, 0.000001]:
         print(f'p={p}')
         # Получение матрицы A
         matrix_A = get_matrix_A(p)
@@ -69,11 +68,13 @@ def main():
         # Решение уравнения A_t * A * x = A_t * b
         result_transform = solve(matrix_A_transpose_A, vector_A_ransponse_b)
         # Выводим обусловленность матриц
-        print(f'Обусловленность матрицы A: {cond(matrix_A, p="fro")} {cond(matrix_A_transpose_A, p="fro")}')
+        print(f'Обусловленность матрицы A: {cond(matrix_A, p="fro")} '
+              f'A_T * A: {cond(matrix_A_transpose_A, p="fro")}')
         # Выводим вектора ответа и дельту
         print_answer(result, result_transform)
         # Выведем ||x_1-x_2||/||x_1||
-        print(f'||x_1-x_2||/||x_1||={norm(result - result_transform, ord="fro") / norm(result, ord="fro")}')
+        print(f'||x_1-x_2||/||x_1||='
+              f'{norm(result - result_transform, ord="fro") / norm(result, ord="fro")}')
         print('=' * 80)
 
 
